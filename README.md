@@ -13,7 +13,14 @@ Working with Aws and Terraform
 3. Running the Terraform in the given workspace
 
      terraform init
+
      terraform plan --var-file dev.tfvars
 
-Note: Before you plan and apply the terraform, please add your credentials
-      such as aws_access_key, aws_secret_key and your public_key
+     terraform apply --var-file dev.tfvars
+
+4. Destroy
+
+     terraform destroy --var-file dev.tfvars
+
+Note: Before you plan and apply the terraform.
+       please add your credentials such as aws_access_key, aws_secret_key and your public_key in the dev.tfvars files
