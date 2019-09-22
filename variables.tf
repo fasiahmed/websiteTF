@@ -32,6 +32,9 @@ variable "public_cidrs" {
 variable "private_cidrs" {
   type = list
 }
+variable "rds_cidr" {
+  type = list
+}
 variable "accessip" {
   description = "Describe the cidr blocks or ip address which will access the aws instances"
   type        = string
@@ -50,5 +53,34 @@ variable "instance_count" {
 }
 variable "instanceType" {
   description = "describe the instance type example t1.micro or t1.small"
+  type        = string
+}
+# RDS -------------------------
+variable "rds_storage_size" {
+  description = "describe the storage size of the database"
+  type        = string
+}
+variable "rds_engine" {
+  description = "describe the type of the database engine"
+  type        = string
+}
+variable "rds_engine_version" {
+  description = "describe the version of the database"
+  type        = string
+}
+variable "rds_instance_class" {
+  description = "describe the database instance class"
+  type        = string
+}
+variable "rds_db_name" {
+  description = "describe the name of the database"
+  type        = string
+}
+variable "rds_db_user" {
+  description = "describe the user of the database"
+  type        = string
+}
+variable "rds_db_password" {
+  description = "describe the password of the database"
   type        = string
 }

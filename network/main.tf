@@ -58,6 +58,17 @@ resource "aws_subnet" "tf_private_subnet" {
     Name = "${var.project_name}-privateSubnet_${count.index + 1}"
   }
 }
+# Creating RDS subnets in the availability_zone
+resource "aws_subnet" "tf_rds_subnet" {
+  count                   = 2
+  vpc_id                  = "${aws_vpc.tf_vpc.id}"
+  cidr_block              = "${var.rds_cidr[count.index]}"
+  map_public_ip_on_launch = false
+  availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
+  tags = {
+    Name = "${var.project_name}-privateSubnet_${count.index + 1}"
+  }
+}
 # public route table associations
 resource "aws_route_table_association" "tf_public_assoc" {
   count          = "${length(var.public_cidrs)}"
@@ -132,6 +143,20 @@ resource "aws_security_group" "tf_private_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+# Creating a RDS Security group
+resource "aws_security_group" "tf_rds_sg" {
+  name        = "${var.project_name}_rds_sg"
+  description = "Used for RDS Instance"
+  vpc_id      = "${aws_vpc.tf_vpc.id}"
+  # Open MySql default port
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.tf_dev_sg.id}", "${aws_security_group.tf_public_sg.id}", "${aws_security_group.tf_private_sg.id}"]
+    cidr_blocks     = ["${var.vpc_cidr}"]
   }
 }
 # Creating the VPC Endpoint for private S3 bucket

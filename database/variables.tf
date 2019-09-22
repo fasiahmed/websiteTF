@@ -1,0 +1,10 @@
+variable "rds_storage_size" {}
+variable "project_name" {}
+variable "rds_engine" {}
+variable "rds_engine_version" {}
+variable "rds_instance_class" {}
+variable "rds_db_name" {}
+variable "rds_db_user" {}
+variable "rds_db_password" {}
+variable "rds_vpcsecuritygroup_ids" {}
+variable "rds_subnets_ids" {}
