@@ -1,13 +1,14 @@
 aws_region      = "eu-central-1"
-aws_access_key  = "Your's Staging aws_access_key"
-aws_secret_key  = "Your's Staging aws_secret_key"
+aws_access_key  = "change the value here"
+aws_secret_key  = "change the value here"
 project_name    = "devsite"
 vpc_cidr        = "10.12.0.0/16"
 route_cidr      = "0.0.0.0/0"
 accessip        = "0.0.0.0/0"
 vpc_dns_switch  = true
 public_cidrs    = ["10.12.1.0/24", "10.12.2.0/24"]
+private_cidrs   = ["10.12.3.0/24", "10.12.4.0/24"]
 key_name        = "tf_key"
-public_key_path = "Staging_pubkey.pub" #give yours own public key
+public_key_path = "your_pubkey.pub" #Give the path to your public key.
 instance_count  = 2
 instanceType    = "t2.micro"

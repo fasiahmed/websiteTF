@@ -29,6 +29,9 @@ variable "vpc_dns_switch" {
 variable "public_cidrs" {
   type = list
 }
+variable "private_cidrs" {
+  type = list
+}
 variable "accessip" {
   description = "Describe the cidr blocks or ip address which will access the aws instances"
   type        = string

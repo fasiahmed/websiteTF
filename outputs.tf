@@ -7,15 +7,15 @@ output "BucketName" {
 #---Networking Outputs -----
 
 output "PublicSubnets" {
-  value = "${join(", ", module.network.subnets)}"
+  value = "${join(", ", module.network.public_subnets)}"
 }
 
 output "SubnetIPs" {
-  value = "${join(", ", module.network.subnet_ips)}"
+  value = "${join(", ", module.network.public_subnet_ips)}"
 }
 
 output "PublicSecurityGroup" {
-  value = "${module.network.security_group}"
+  value = "${module.network.public_security_group}"
 }
 
 #---Compute Outputs ------
