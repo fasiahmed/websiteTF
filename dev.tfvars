@@ -12,8 +12,8 @@ private_cidrs  = ["10.12.3.0/24", "10.12.4.0/24"]
 rds_cidr       = ["10.12.5.0/24", "10.12.6.0/24"]
 #------- web server variables ------
 key_name        = "tf_key"
-public_key_path = "yours_pubkey.pub" #Give the path to your public key.
-instance_count  = 2
+public_key_path = "Your_pubkey.pub" #Give the path to your public key.
+instance_count  = 1
 instanceType    = "t2.micro"
 #------- Database variables ------
 rds_storage_size   = 10
@@ -23,3 +23,13 @@ rds_instance_class = "db.t2.micro"
 rds_db_name        = "wordpress"
 rds_db_user        = "admin"
 rds_db_password    = "admin123"
+#-------- ELB variables ----------------------
+instance_port       = 80
+instance_protocol   = "http"
+lb_port             = 80
+lb_protocol         = "http"
+healthy_threshold   = 2
+unhealthy_threshold = 2
+timeout             = 3
+target              = "TCP:80"
+interval            = 30

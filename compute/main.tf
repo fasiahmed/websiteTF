@@ -32,4 +32,17 @@ resource "aws_instance" "webserver" {
   tags = {
     Name = "${var.project_name}-server${count.index + 1}"
   }
+  provisioner "local-exec" {
+    command = <<EOD
+    cat <<EOF >aws_hosts
+    [dev]
+    ${element(aws_instance.webserver.*.public_ip, count.index)}
+    [dev:vars]
+    s3code = ${var.s3_bucket_name}
+    EOF
+    EOD
+  }
+  provisioner "local-exec" {
+    command = "aws ec2 wait instance-status-ok --instance_ids ${element(aws_instance.webserver.*.id, count.index)} && ansible-playbook -i aws_hosts wp_webserver.yml"
+  }
 }

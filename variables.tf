@@ -84,3 +84,40 @@ variable "rds_db_password" {
   description = "describe the password of the database"
   type        = string
 }
+#-------------- ELB -----------------
+variable "instance_port" {
+  description = "Describe the instance webserver port"
+  type        = number
+}
+variable "instance_protocol" {
+  description = "Descript the Protocol TCP or HTTP"
+  type        = string
+}
+variable "lb_port" {
+  description = "Describe the load balancer external port"
+  type        = number
+}
+variable "lb_protocol" {
+  description = "Describe the load balancer protocol TCP or HTTP"
+  type        = string
+}
+variable "healthy_threshold" {
+  description = "Describe the Heath of the threshold value"
+  type        = number
+}
+variable "unhealthy_threshold" {
+  description = "Describe the  unhealth threshold value"
+  type        = number
+}
+variable "timeout" {
+  description = "Describe the timeout of the session"
+  type        = number
+}
+variable "target" {
+  description = "Describe the target value"
+  type        = string
+}
+variable "interval" {
+  description = "Describe the interval"
+  type        = number
+}

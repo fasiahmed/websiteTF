@@ -6,3 +6,4 @@ variable "instanceType" {}
 variable "security_group" {}
 variable "subnets" {}
 variable "subnet_ips" {}
+variable "s3_bucket_name" {}

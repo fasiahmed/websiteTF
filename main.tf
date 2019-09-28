@@ -22,6 +22,22 @@ module "network" {
   rds_cidr      = "${var.rds_cidr}"
   accessip      = "${var.accessip}"
 }
+# deploy load balancer elb module
+module "elb" {
+  source              = "./elb"
+  project_name        = "${var.project_name}"
+  subnet_ids          = "${module.network.public_subnets}"
+  security_group      = "${module.network.public_security_group}"
+  instance_port       = "${var.instance_port}"
+  instance_protocol   = "${var.instance_protocol}"
+  lb_port             = "${var.lb_port}"
+  lb_protocol         = "${var.lb_protocol}"
+  healthy_threshold   = "${var.healthy_threshold}"
+  unhealthy_threshold = "${var.unhealthy_threshold}"
+  timeout             = "${var.timeout}"
+  target              = "${var.target}"
+  interval            = "${var.interval}"
+}
 # deploy "webserver"
 module "compute" {
   source          = "./compute"
@@ -33,6 +49,7 @@ module "compute" {
   security_group  = "${module.network.dev_security_group}"
   subnets         = "${module.network.public_subnets}"
   subnet_ips      = "${module.network.public_subnet_ips}"
+  s3_bucket_name  = "${module.storage.bucket_out}"
 }
 # deploy RDS MysQL
 module "database" {
@@ -45,6 +62,6 @@ module "database" {
   rds_db_name              = "${var.rds_db_name}"
   rds_db_user              = "${var.rds_db_user}"
   rds_db_password          = "${var.rds_db_password}"
-  rds_subnets_ids          = "${module.network.rds_subnets_0}"
+  rds_subnets_ids          = "${module.network.allSubnets}"
   rds_vpcsecuritygroup_ids = "${module.network.rds_security_group}"
 }
