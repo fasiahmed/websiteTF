@@ -1,7 +1,8 @@
 # RDS subnet group
 resource "aws_db_subnet_group" "tf_rds_subnetgroup" {
-  name       = "tf_rds_subnetgroup"
-  subnet_ids = ["${var.rds_subnets_ids}"]
+  name        = "tf_rds_subnetgroup"
+  description = "Private subnets for RDS instance"
+  subnet_ids  = ["${var.rds_subnets_ids}"]
   tags = {
     Name = "${var.project_name}-db_subnetgroupname"
   }

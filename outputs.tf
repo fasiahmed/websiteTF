@@ -6,23 +6,26 @@ output "BucketName" {
 
 #---Networking Outputs -----
 
-output "PublicSubnets" {
+output "PublicSubnetIDs" {
   value = "${join(", ", module.network.public_subnets)}"
 }
-output "PrivateSubnets" {
+output "PrivateSubnetIDs" {
   value = "${join(", ", module.network.private_subnets)}"
 }
-output "RdsSubnets" {
+output "RdsSubnetIDs" {
   value = "${join(", ", module.network.rds_subnets)}"
 }
 output "allSubnets" {
   value = "${split(",", join(",", module.network.rds_subnets, module.network.private_subnets, module.network.public_subnets))}"
 }
-output "rds_subnets_0" {
-  value = "${element(module.network.rds_subnets, 1)}"
-}
-output "SubnetIPs" {
+output "PublicSubnetIPs" {
   value = "${join(", ", module.network.public_subnet_ips)}"
+}
+output "PrivateSubnetIPs" {
+  value = "${join(", ", module.network.private_subnet_ips)}"
+}
+output "RdsSubnetIPs" {
+  value = "${join(", ", module.network.rds_subnet_ips)}"
 }
 output "PublicSecurityGroup" {
   value = "${module.network.public_security_group}"
@@ -32,6 +35,9 @@ output "PrivateSecurityGroup" {
 }
 output "RdsSecurityGroup" {
   value = "${module.network.rds_security_group}"
+}
+output "VPCendpointID" {
+  value = "${module.network.vpc_endpoint_id}"
 }
 #---Compute Outputs ------
 output "PublicInstanceIDs" {

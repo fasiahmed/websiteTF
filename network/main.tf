@@ -66,7 +66,7 @@ resource "aws_subnet" "tf_rds_subnet" {
   map_public_ip_on_launch = false
   availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
   tags = {
-    Name = "${var.project_name}-privateSubnet_${count.index + 1}"
+    Name = "${var.project_name}-rdsSubnet_${count.index + 1}"
   }
 }
 # public route table associations
@@ -82,35 +82,34 @@ resource "aws_route_table_association" "tf_private_assoc" {
   route_table_id = "${aws_default_route_table.tf_defaultRT.id}"
 }
 # Creating a Dev Security group which is access by your IP addr and open ssh and http ports enabled
-resource "aws_security_group" "tf_dev_sg" {
-  name        = "${var.project_name}_dev_sg"
-  description = "Used for access the dev instances"
-  vpc_id      = "${aws_vpc.tf_vpc.id}"
-  #SSH
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${var.accessip}"]
+resource "aws_default_security_group" "default" {
+  vpc_id = "${aws_vpc.tf_vpc.id}"
+  dynamic "ingress" {
+    for_each = var.ingress_sg_block
+    content {
+      from_port   = ingress.value["from_port"]
+      to_port     = ingress.value["to_port"]
+      protocol    = ingress.value["protocol"]
+      cidr_blocks = ingress.value["cidr_blocks"]
+    }
   }
-  #HTTP
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["${var.accessip}"]
+  dynamic "egress" {
+    for_each = var.egress_sg_block
+    content {
+      from_port   = egress.value["from_port"]
+      to_port     = egress.value["to_port"]
+      protocol    = egress.value["protocol"]
+      cidr_blocks = egress.value["cidr_blocks"]
+    }
   }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  tags = {
+    Name = "Dev_SecurityGroup"
   }
 }
 # Creating a ELB Security group which is access publicly
 resource "aws_security_group" "tf_public_sg" {
   name        = "${var.project_name}_public_sg"
-  description = "Used for ELB public access"
+  description = "Default securtiygroup for public access"
   vpc_id      = "${aws_vpc.tf_vpc.id}"
   #HTTP
   ingress {
@@ -124,6 +123,9 @@ resource "aws_security_group" "tf_public_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "Public_SecurityGroup"
   }
 }
 # Creating a private Security group which is access only from VPC
@@ -144,6 +146,9 @@ resource "aws_security_group" "tf_private_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    Name = "Private_SecurityGroup"
+  }
 }
 # Creating a RDS Security group
 resource "aws_security_group" "tf_rds_sg" {
@@ -155,8 +160,11 @@ resource "aws_security_group" "tf_rds_sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.tf_dev_sg.id}", "${aws_security_group.tf_public_sg.id}", "${aws_security_group.tf_private_sg.id}"]
+    security_groups = ["${aws_default_security_group.default.id}", "${aws_security_group.tf_public_sg.id}", "${aws_security_group.tf_private_sg.id}"]
     cidr_blocks     = ["${var.vpc_cidr}"]
+  }
+  tags = {
+    Name = "RDS_SecurityGroup"
   }
 }
 # Creating the VPC Endpoint for private S3 bucket

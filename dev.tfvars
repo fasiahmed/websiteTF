@@ -10,9 +10,34 @@ vpc_dns_switch = true
 public_cidrs   = ["10.12.1.0/24", "10.12.2.0/24"]
 private_cidrs  = ["10.12.3.0/24", "10.12.4.0/24"]
 rds_cidr       = ["10.12.5.0/24", "10.12.6.0/24"]
+ingress_sg_block = [
+  {
+    description = "Allow SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  },
+  {
+    description = "Allow HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
+egress_sg_block = [
+  {
+    description = "Allow all traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+]
 #------- web server variables ------
 key_name        = "tf_key"
-public_key_path = "Your_pubkey.pub" #Give the path to your public key.
+public_key_path = "compute/tf_key.pub" #Give the path to your public key.
 instance_count  = 1
 instanceType    = "t2.micro"
 #------- Database variables ------

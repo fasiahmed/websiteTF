@@ -55,6 +55,14 @@ variable "instanceType" {
   description = "describe the instance type example t1.micro or t1.small"
   type        = string
 }
+variable "ingress_sg_block" {
+  description = "describe the ingress sesurity block"
+  type        = list
+}
+variable "egress_sg_block" {
+  description = "describe the egress sesurity block"
+  type        = list
+}
 # RDS -------------------------
 variable "rds_storage_size" {
   description = "describe the storage size of the database"

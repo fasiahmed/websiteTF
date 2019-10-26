@@ -10,15 +10,17 @@ module "storage" {
 }
 # deploy the network
 module "network" {
-  source        = "./network"
-  project_name  = "${var.project_name}"
-  region        = "${var.aws_region}"
-  vpc_cidr      = "${var.vpc_cidr}"
-  route_cidr    = "${var.route_cidr}"
-  public_cidrs  = "${var.public_cidrs}"
-  private_cidrs = "${var.private_cidrs}"
-  rds_cidr      = "${var.rds_cidr}"
-  accessip      = "${var.accessip}"
+  source           = "./network"
+  project_name     = "${var.project_name}"
+  region           = "${var.aws_region}"
+  vpc_cidr         = "${var.vpc_cidr}"
+  route_cidr       = "${var.route_cidr}"
+  public_cidrs     = "${var.public_cidrs}"
+  private_cidrs    = "${var.private_cidrs}"
+  rds_cidr         = "${var.rds_cidr}"
+  accessip         = "${var.accessip}"
+  ingress_sg_block = "${var.ingress_sg_block}"
+  egress_sg_block  = "${var.egress_sg_block}"
 }
 # deploy load balancer elb module
 module "elb" {
@@ -44,12 +46,12 @@ module "compute" {
   public_key_path = "${var.public_key_path}"
   instance_count  = "${var.instance_count}"
   instanceType    = "${var.instanceType}"
-  security_group  = "${module.network.dev_security_group}"
+  security_group  = "${module.network.default_security_group}"
   subnets         = "${module.network.public_subnets}"
   subnet_ips      = "${module.network.public_subnet_ips}"
   s3_bucket_name  = "${module.storage.bucket_out}"
 }
-# deploy RDS MysQL
+# # deploy RDS MysQL
 module "database" {
   source                   = "./database"
   project_name             = "${var.project_name}"
